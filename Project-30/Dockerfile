@@ -13,8 +13,8 @@ RUN npm install
 # Step 5: Copy the rest of the application files into the container
 COPY . .
 
-# Step 6: Expose the necessary port (adjust this according to your app's setup)
+# Step 6: Expose the necessary port
 EXPOSE 80
 
-# Step 7: Define the default command to run your app (adjust this for your app)
+# Step 7: Define the default command to run your app
 CMD ["npm", "start"]
