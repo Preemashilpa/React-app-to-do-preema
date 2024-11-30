@@ -25,8 +25,7 @@ tools {
             sh '''
             docker stop c1
             docker rm c1
-             docker run -it -d --name c1 -p 9000:80 preema21/react-to-do-application:1
-
+             docker run -it -d --name c1 -p 9000:3000 preema21/react-to-do-application:1
             '''
         }
       }
