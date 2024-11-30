@@ -1,41 +1,21 @@
+# Step 1: Use a Node.js base image
 FROM node:20
 
+# Step 2: Set working directory inside the container
 WORKDIR /app
 
-COPY . .
+# Step 3: Copy package.json and package-lock.json (if they exist)
+COPY package*.json ./
 
+# Step 4: Install dependencies
 RUN npm install
 
+# Step 5: Copy the rest of your app files
+COPY . .
+
+# Step 6: Expose the port your app runs on
 EXPOSE 80
 
+# Step 7: Start the application
 CMD ["npm", "start"]
 
-# Step 1: Use an official node image to build the React app
-#FROM node:18 AS build
-
-# Set the working directory in the container
-#WORKDIR /app
-
-# Copy package.json and package-lock.json (or yarn.lock) into the container
-#COPY package*.json ./
-
-# Install the project dependencies
-#RUN npm install
-
-# Copy the rest of the application files into the container
-#COPY . .
-
-# Build the React app for production
-#RUN npm run build
-
-# Step 2: Use an official Nginx image to serve the built React app
-#FROM nginx:alpine
-
-# Copy the build folder from the previous step into the Nginx container
-#COPY --from=build /app/build /usr/share/nginx/html
-
-# Expose port 80 so the app can be accessed
-#EXPOSE 80
-
-# Command to run Nginx in the container
-#CMD ["nginx", "-g", "daemon off;"]

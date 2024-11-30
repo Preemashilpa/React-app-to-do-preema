@@ -1,34 +1,32 @@
 pipeline {
     agent any
 
-tools {
-        nodejs 'nodejs'  // 'nodejs' is the name you gave it in the Global Tool Configuration both shouls same toby
+    tools {
+        nodejs 'nodejs'  // Ensure this matches the name you set in Jenkins Global Tool Configuration
     }
     
-    stages{
-        stage('git checkout'){
-           steps{
-               git branch: 'main', url: 'https://github.com/Preemashilpa/React-app-to-do-preema.git'
-               
-               
-           }
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Preemashilpa/React-app-to-do-preema.git'
+            }
         }
         
-        stage('Docker Build and tag'){
-         steps{
-            sh "docker build -t preema21/react-to-do-application:1 ." //dockerhubname-imgname/tagverion
-         }
-      }
-      stage('Containerisation'){
-        steps{
-            sh '''
-            docker stop c1
-            docker rm c1
-             docker run -it -d --name c1 -p 9000:80 preema21/react-app-to-do-application:1
-
-            '''
+        stage('Docker Build and Tag') {
+            steps {
+                sh "docker build -t preema21/react-to-do-application:1 ." // Building the Docker image
+            }
         }
-      }
-    } 
+
+        stage('Containerization') {
+            steps {
+                sh '''
+                docker stop c1 || true
+                docker rm c1 || true
+                docker run -it -d --name c1 -p 9000:80 preema21/react-to-do-application:1
+                '''
+            }
+        }
+    }
 }
 
