@@ -14,7 +14,8 @@ pipeline {
         
         stage('Docker Build and Tag') {
             steps {
-                sh "docker build -t preema21/react-to-do-application:1 ." // Building the Docker image
+                // Update the build context to "Project-30" and specify the Dockerfile path
+                sh "docker build -f Project-30/Dockerfile -t preema21/react-to-do-application:1 Project-30"
             }
         }
 
