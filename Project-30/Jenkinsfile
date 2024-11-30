@@ -16,7 +16,8 @@ tools {
         
         stage('Docker Build and tag'){
          steps{
-            sh "docker build -t preema21/react-to do-application:1 ."
+            sh "docker build -t preema21/react-to-do-application:1 ."
+
          }
       }
       stage('Containerisation'){
