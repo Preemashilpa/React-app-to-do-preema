@@ -1,74 +1,33 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'nodejs'  // Ensure this matches the name you set in Jenkins Global Tool Configuration
+tools {
+        nodejs 'nodejs' 
     }
-
-    environment {
-        IMAGE_NAME = "preema21/react-to-do-application"
-        TAG = "1" // Can be dynamically set to commit hash, build number, etc.
-        PROJECT_DIR = 'Project-30' // Directory where Dockerfile and Jenkinsfile are located
-    }
-
-    stages {
-        stage('Git Checkout') {
-            steps {
-                echo "Checking out the repository..."
-                // Ensure you're checking out the repository with Project-30 folder structure
-                git branch: 'main', url: 'https://github.com/Preemashilpa/React-app-to-do-preema.git'
-            }
+    
+    stages{
+        stage('git checkout'){
+           steps{
+               git branch: 'main', url: 'https://github.com/Preemashilpa/React-app-to-do-preema.git'
+               
+               
+           }
         }
+        
+        stage('Docker Build and tag'){
+         steps{
+            sh "docker build -t preema21/react-application:1 ."
+         }
+      }
+      stage('Containerisation'){
+        steps{
+            sh '''
+            docker stop c1
+            docker rm c1
+             docker run -it -d --name c1 -p 9000:80 preema21/react-to-do-application:1
 
-        stage('Check Dockerfile') {
-            steps {
-                script {
-                    // Change directory to Project-30
-                    dir("${PROJECT_DIR}") {
-                        def dockerfileExists = fileExists 'Dockerfile'
-                        echo "Dockerfile exists: ${dockerfileExists}"
-                        if (!dockerfileExists) {
-                            error 'Dockerfile not found!'
-                        }
-                    }
-                }
-            }
+            '''
         }
-
-        stage('Docker Build and Tag') {
-            steps {
-                script {
-                    // Change directory to Project-30
-                    dir("${PROJECT_DIR}") {
-                        def dockerTag = "${IMAGE_NAME}:${TAG}"
-                        echo "Building Docker image with tag ${dockerTag}"
-                        // Run Docker build in the Project-30 directory
-                        sh "docker build -t ${dockerTag} ."
-                    }
-                }
-            }
-        }
-
-        stage('Containerization') {
-            steps {
-                script {
-                    // Change directory to Project-30
-                    dir("${PROJECT_DIR}") {
-                        echo "Stopping and removing existing container 'c1'..."
-                        sh '''
-                        docker stop c1 || true
-                        docker rm c1 || true
-                        docker run -it -d --name c1 -p 9000:80 ${IMAGE_NAME}:${TAG}
-                        '''
-                    }
-                }
-            }
-        }
-
-        stage('Check Running Containers') {
-            steps {
-                sh 'docker ps -a'
-            }
-        }
-    }
+      }
+    } 
 }
