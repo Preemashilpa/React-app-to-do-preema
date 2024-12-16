@@ -1,4 +1,4 @@
-# Step 1: Use a base image
+# Step 1: Use a base image node=20 is base image
 FROM node:20
 
 # Step 2: Set the working directory in the container
